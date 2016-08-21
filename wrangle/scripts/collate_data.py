@@ -1,8 +1,6 @@
 """
-breaks data into 3 year periods
-2003-2005
-2006-2008
-2009-2011
-2012-2014
-2015-
+breaks data into 4 year periods
+2003-2006
+2007-2010
+2011-2015
 """

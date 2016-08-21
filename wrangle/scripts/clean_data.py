@@ -9,7 +9,7 @@ from datetime import datetime
 HEADERS = [
     'incident_num', 'category', 'description',
     'datetime', 'pd_district', 'resolution',
-    'address', 'longitude', 'latitude',
+    'day_of_week', 'address', 'longitude', 'latitude',
     'pd_id'
 ]
 
@@ -30,6 +30,7 @@ for i, r in enumerate(srccsv):
     d['category'] = r['Category']
     d['description'] = r['Descript']
     d['datetime'] = datetime.strptime(r['Date'] + r['Time'], '%m/%d/%Y%H:%M')
+    d['day_of_week'] = r['DayOfWeek'][0:3]
     d['pd_district'] = r['PdDistrict']
     d['resolution'] = r['Resolution']
     d['address'] = r['Address']
