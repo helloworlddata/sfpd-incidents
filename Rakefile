@@ -1,7 +1,7 @@
 require 'pathname'
 
 START_YEAR = 2003
-END_YEAR = 2016
+END_YEAR = 2016 # TK TODO: END_YEAR should be changed to dynamically be THIS year
 
 WRANGLE_DIR = Pathname 'wrangle'
 CORRAL_DIR = WRANGLE_DIR.join('corral')
@@ -61,6 +61,15 @@ namespace :publish do
         PYR_FILES.each_pair do |period, destname|
             Rake::Task[destname].execute()
         end
+    end
+
+    desc "Pull newest year data, recompile and republish"
+    task :refresh do
+        # TK TODO: END_YEAR should be changed to dynamically be THIS year
+        thisyear = END_YEAR
+        Rake::Task[DIRS[:fetched].join("#{thisyear}.csv")].execute()
+        Rake::Task['publish:cleaned'].execute()
+        Rake::Task[PYR_FILES[thisyear]].execute()
     end
 end
 
