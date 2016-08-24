@@ -52,12 +52,12 @@ namespace :publish do
     end
 
     desc "Create clean and compiled datafile"
-    task :cleaned do
+    task :clean do
         Rake::Task[FILES[:cleaned]].execute()
     end
 
     desc "Publish the data files"
-    task :published do
+    task :publish do
         PYR_FILES.each_pair do |period, destname|
             Rake::Task[destname].execute()
         end
