@@ -71,6 +71,8 @@ if __name__ == '__main__':
     parser.add_argument('year', type=int)
     args = parser.parse_args()
     year = args.year
+    myloggy.info("Fetching data from year: %s" % year)
+
     csvin = fetch_full_year(year)
     csvout = DictWriter(stdout, fieldnames=csvin.fieldnames)
     csvout.writeheader()

@@ -68,7 +68,7 @@ namespace :publish do
         # TK TODO: END_YEAR should be changed to dynamically be THIS year
         thisyear = END_YEAR
         Rake::Task[DIRS[:fetched].join("#{thisyear}.csv")].execute()
-        Rake::Task['publish:cleaned'].execute()
+        Rake::Task['publish:clean'].execute()
         Rake::Task[PYR_FILES[thisyear]].execute()
     end
 end

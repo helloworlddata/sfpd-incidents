@@ -20,3 +20,4 @@ https://data.sfgov.org/resource/tmnf-yvry.json?$where=date > '2016' and date < '
 
 
 https://data.sfgov.org/resource/tmnf-yvry.json?$where=date between "2016-01-01" and "2016-01-02"
+http://www.theatlantic.com/politics/archive/2016/04/san-francisco-crime-policy/479880/http://civilgrandjury.sfgov.org/2015_2016/2015-16_CGJ_Final_Report_Auto_Burglary_in_SF_6_20_16.pdf
