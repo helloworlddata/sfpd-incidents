@@ -1,0 +1,104 @@
+title: SFPD Incidents
+traits:
+  geospatial:
+    fields:
+      - name: longitude
+      - name: latitude
+  chronological:
+    fields:
+      - name: datetime
+        granularity: minute
+
+indexes:
+  - fields: [incident_number, pd_id]
+    primary: true
+  - fields: [latitude]
+  - fields: [longitude]
+  - fields: [pd_district]
+  - fields: [datetime]
+  - fields: [category, description, resolution]
+  - fields: [description]
+  - fields: [resolution]
+
+fields:
+  - name: incident_number
+    type: string
+    length: 20
+    examples:
+    - 3979
+    - 991582377
+    - 110323405
+  - name: datetime
+    type: datetime
+    format: '%Y-%m-%d %H:%M:%S'
+    examples:
+    - '2003-01-01 00:01:00'
+    - '2016-08-31 23:58:00'
+    - '2004-06-17 18:52:00'
+  - name: category
+    type: string
+    length: 60
+    examples:
+    - TREA
+    - FRAUD
+    - LIQUOR LAWS
+    - SEX OFFENSES, NON FORCIBLE
+    - DRIVING UNDER THE INFLUENCE
+  - name: description
+    type: string
+    length: 100
+    examples:
+    - RIOT
+    - ARSON
+    - TAMPERING WITH MARKS ON FIREARM
+    - RESISTING PEACE OFFICER, CAUSING THEIR SERIOUS INJURY OR DEATH
+    - SCHOOL STUDENT OR EMPLOYEE ENTERING  CAMPUS AFTER SUSPENSION OR DISMISSAL
+  - name: resolution
+    type: string
+    length: 60
+    examples:
+    - NONE
+    - LOCATED
+    - PSYCHOPATHIC CASE
+    - DISTRICT ATTORNEY REFUSES TO PROSECUTE
+    - CLEARED-CONTACT JUVENILE FOR MORE INFO
+  - name: pd_district
+    type: string
+    has_nulls: true
+    length: 10
+    examples:
+    - PARK
+    - MISSION
+    - SOUTHERN
+    - INGLESIDE
+    - TENDERLOIN
+  - name: address
+    type: string
+    length: 100
+    examples:
+      - GENEVA AV /
+      - TEHAMA ST /
+      - FULTON ST / PARSONS ST
+      - JOHN F KENNEDY DR / MARTIN LUTHER KING JR DR
+      - THE EMBARCADEROSOUTH ST / THE EMBARCADERONORTH ST
+  - name: longitude
+    type: float
+    length: [9, 6]
+    examples:
+      - -122.51364206429
+      - -120.5
+      - -122.417335830441
+  - name: latitude
+    type: float
+    length: [9, 6]
+    examples:
+      - 37.7078790224135
+      - 90.0
+      - 37.750760915449604
+  - name: pd_id
+    type: string
+    length: 30
+    examples:
+    - 397963010
+    - 99158237763010
+    - 11002355868020
