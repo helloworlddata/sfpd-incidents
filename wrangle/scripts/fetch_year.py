@@ -10,12 +10,12 @@ have to perform that manually, in-memory, at the end, before outputting
 to stdout
 """
 
+import argparse
 from copy import copy
 from csv import DictReader, DictWriter
 from loggy import loggy
-from sys import stdout
-import argparse
 import requests
+from sys import stdout
 
 myloggy = loggy('fetch_year.py')
 

@@ -8,7 +8,6 @@ from datetime import datetime
 from loggy import loggy
 from sys import stdout
 
-PACIFIC_TZ_SUFFIX = '-0700'
 
 RAW_HEADERS = [
     'IncidntNum','Category','Descript','DayOfWeek','Date','Time',
@@ -34,7 +33,7 @@ def clean_row(row):
     d['category'] = r['Category']
     d['description'] = r['Descript']
     dt = datetime.strptime(r['Date'] + ' ' + r['Time'], '%m/%d/%Y %H:%M')
-    d['datetime'] = dt.strftime('%Y-%m-%d %H:%M:%S') + PACIFIC_TZ_SUFFIX
+    d['datetime'] = dt.strftime('%Y-%m-%d %H:%M:%S')
     d['pd_district'] = r['PdDistrict']
     d['resolution'] = r['Resolution']
     d['address'] = r['Address']

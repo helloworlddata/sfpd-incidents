@@ -5,17 +5,17 @@ END_YEAR = 2016 # TK TODO: END_YEAR should be changed to dynamically be THIS yea
 
 WRANGLE_DIR = Pathname 'wrangle'
 CORRAL_DIR = WRANGLE_DIR.join('corral')
-SCRIPTS_DIR = WRANGLE_DIR.join('scripts')
+SCRIPTS = WRANGLE_DIR.join('scripts')
 
 DIRS = {
-    fetched: CORRAL_DIR.join('fetched'),
-    cleaned: CORRAL_DIR.join('cleaned'),
-    published: Pathname('data'),
+    'fetched' => CORRAL_DIR.join('fetched'),
+    'cleaned' =>  CORRAL_DIR.join('cleaned'),
+    'published' => Pathname('catalog'),
 }
 
 FILES = {
-    fetched: (START_YEAR..END_YEAR).map{|y| DIRS[:fetched] / "#{y}.csv"},
-    cleaned: DIRS[:cleaned] / 'sfpd-incidents.csv',
+    'fetched' => (START_YEAR..END_YEAR).map{|y| DIRS['fetched'] / "#{y}.csv"},
+    'cleaned' => DIRS['cleaned'] / 'sfpd-incidents.csv',
 }
 
 PYR_FILES = Hash[[
@@ -27,7 +27,7 @@ PYR_FILES = Hash[[
     2016].map{ |p|
                 suffix = p.is_a?(Range) ? "#{p.first}-through-#{p.last}" : p
                 fname = "sfpd-incidents-#{suffix}.csv"
-                [p, DIRS[:published] / fname]
+                [p, DIRS['published'] / fname]
         }]
 
 
@@ -43,34 +43,32 @@ task :setup do
 end
 
 
-namespace :publish do
-    desc "Fetch data from #{START_YEAR} through #{END_YEAR}"
-    task :fetch do
-        FILES[:fetched].each do |fn|
-            Rake::Task[fn].invoke()
-        end
+desc "Fetch data from #{START_YEAR} through #{END_YEAR}"
+task :fetch do
+    FILES['fetched'].each do |fn|
+        Rake::Task[fn].invoke()
     end
+end
 
-    desc "Create clean and compiled datafile"
-    task :clean do
-        Rake::Task[FILES[:cleaned]].execute()
-    end
+desc "Create clean and compiled datafile"
+task :clean do
+    Rake::Task[FILES['cleaned']].execute()
+end
 
-    desc "Publish the data files"
-    task :publish do
-        PYR_FILES.each_pair do |period, destname|
-            Rake::Task[destname].execute()
-        end
+desc "Publish the data files"
+task :publish do
+    PYR_FILES.each_pair do |period, destname|
+        Rake::Task[destname].execute()
     end
+end
 
-    desc "Pull newest year data, recompile and republish"
-    task :refresh do
-        # TK TODO: END_YEAR should be changed to dynamically be THIS year
-        thisyear = END_YEAR
-        Rake::Task[DIRS[:fetched].join("#{thisyear}.csv")].execute()
-        Rake::Task['publish:clean'].execute()
-        Rake::Task[PYR_FILES[thisyear]].execute()
-    end
+desc "Pull newest year data, recompile and republish"
+task :refresh do
+    # TK TODO: END_YEAR should be changed to dynamically be THIS year
+    thisyear = END_YEAR
+    Rake::Task[DIRS['fetched'].join("#{thisyear}.csv")].execute()
+    Rake::Task[:clean].execute()
+    Rake::Task[PYR_FILES[thisyear]].execute()
 end
 
 
@@ -80,23 +78,23 @@ namespace :filings do # doing this just to visually indicate which tasks are fil
         file destname  do
             cmd = ['csvgrep -c datetime',
                     '-r', %Q{'#{Array(period).join('|')}'},
-                   FILES[:cleaned],
+                   FILES['cleaned'],
                    '>', destname].join(' ')
             sh cmd
         end
     end
 
-    file FILES[:cleaned] => FILES[:fetched] do
-        sh ['cat', FILES[:fetched].join(' '), '|',
-            'python', SCRIPTS_DIR / 'clean.py', '-',
-            '>', FILES[:cleaned]].join(' ')
+    file FILES['cleaned'] => FILES['fetched'] do
+        sh ['cat', FILES['fetched'].join(' '), '|',
+            'python', SCRIPTS / 'clean.py', '-',
+            '>', FILES['cleaned']].join(' ')
     end
 
 
-    FILES[:fetched].each do |fname|
+    FILES['fetched'].each do |fname|
         year = fname.to_s[/\d{4}(?=\.csv)/]
         file fname => :setup do
-            sh "python #{SCRIPTS_DIR.join('fetch_year.py')} #{year} > #{fname}"
+            sh "python #{SCRIPTS.join('fetch_year.py')} #{year} > #{fname}"
         end
     end
 end
